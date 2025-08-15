@@ -60,3 +60,11 @@ apko build apko.yml sample-apko:0.1 sample-apko.tar -k melange.rsa.pub
 docker load < sample-apko.tar
 docker run -p 8000:8000 sample-apko:0.1-amd64
 ```
+
+## buildah
+
+Para gerar uma imagem da aplicação `sample` com buildah:
+```
+sh buildah
+podman run -p 8000:8000 --rm localhost/sample-buildah
+```
