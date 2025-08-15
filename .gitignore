@@ -1,0 +1,12 @@
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+.venv
+sample/packages
+*.rsa
+*.rsa.pub
+*.tar
+*.spdx.json
