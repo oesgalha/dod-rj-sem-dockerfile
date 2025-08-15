@@ -1,3 +1,4 @@
+#!/bin/bash
 # Pastas com arquivos das camadas da imagem
 IMAGE_L1="l1"
 IMAGE_L2="l2"
@@ -11,10 +12,10 @@ mkdir -p "${IMAGE_ASBL}/blobs/sha256"
 
 # Preencher a camada 1
 CAT_PATH=$(which cat)
-CAT_DEPS=$(ldd ${CAT_PATH} | grep -oE "/lib.*/\S+")
+CAT_DEPS=$(ldd "${CAT_PATH}" | grep -oE "/lib.*/\S+")
 for file in ${CAT_PATH} $CAT_DEPS ; do
-    mkdir -p "${IMAGE_L1}$(dirname $file)"
-    cp $file "${IMAGE_L1}${file}"
+    mkdir -p "${IMAGE_L1}$(dirname "$file")"
+    cp "$file" "${IMAGE_L1}${file}"
 done
 mkdir -p "${IMAGE_L1}/var/data/"
 cat <<EOF > "${IMAGE_L1}/var/data/hello.txt"
@@ -28,7 +29,7 @@ EOF
 tar -C ${IMAGE_L1} -c -f l1.tar .
 gzip -k l1.tar
 cp l1.tar.gz \
-  ${IMAGE_ASBL}/blobs/sha256/$(sha256sum l1.tar.gz | cut -d " " -f 1)
+  ${IMAGE_ASBL}/blobs/sha256/"$(sha256sum l1.tar.gz | cut -d " " -f 1)"
 
 # Preencher a camada 2
 mkdir -p "${IMAGE_L2}/var/data/"
@@ -41,7 +42,7 @@ touch "${IMAGE_L2}/var/data/.wh.lixo.txt"
 tar -C ${IMAGE_L2} -c -f l2.tar .
 gzip -k l2.tar
 cp l2.tar.gz \
-  ${IMAGE_ASBL}/blobs/sha256/$(sha256sum l2.tar.gz | cut -d " " -f 1)
+  ${IMAGE_ASBL}/blobs/sha256/"$(sha256sum l2.tar.gz | cut -d " " -f 1)"
 
 #------------------------------------------------------------------------------
 # Preenche a imagem final com os arquivos JSON:
@@ -73,7 +74,7 @@ cat <<EOF > config.json
 }
 EOF
 cp config.json \
-  ${IMAGE_ASBL}/blobs/sha256/$(sha256sum config.json | cut -d " " -f 1)
+  ${IMAGE_ASBL}/blobs/sha256/"$(sha256sum config.json | cut -d " " -f 1)"
 
 cat <<EOF > manifest.json
 {
@@ -98,7 +99,7 @@ cat <<EOF > manifest.json
 }
 EOF
 cp manifest.json \
-  imagedir/blobs/sha256/$(sha256sum manifest.json | cut -d " " -f 1)
+  imagedir/blobs/sha256/"$(sha256sum manifest.json | cut -d " " -f 1)"
 
 
 cat <<JSON > imagedir/index.json
